@@ -51,10 +51,12 @@ const login = (req, res, next) => {
                     }
 
                     if (result) {
-                        let token = jwt.sign({ name: user.name }, "verySecretValue", { expiresIn: '1h' })
+                        let token = jwt.sign({ name: user.name }, "verySecretValue", { expiresIn: '30s' })
+                        let refreshTtoken = jwt.sign({ name: user.name }, "theserefreshtoken", { expiresIn: '38h' })
                         res.json({
                             message: "Login Successfully",
-                            token: token
+                            token: token,
+                            refreshTtoken
                         })
                     } else {
                         res.json({
@@ -76,8 +78,30 @@ const login = (req, res, next) => {
         })
 }
 
+const refreshToken = (req, res, next) => {
+    const refreshToken = req.body.refreshToken
+    jwt.verify(refreshToken, 'theserefreshtoken' ,(error, decode) => {
+        if(error){
+            res.status(400).json({
+                error
+            })
+        }else{
+            let token = jwt.sign({ name: decode.name}, 'verySecretValue', {expiresIn: '60s'})
+            let refreshToken = req.body.refreshToken
+            res.status(200).json({
+                message: "Token refreshToken successfully",
+                token,
+                refreshToken
+            })
+        }
+
+
+    })
+}
+
+
 module.exports = {
-    register, login
+    register, login, refreshToken
 }
 
 
