@@ -3,17 +3,46 @@ const Employee = require("../models/Employee")
 //show list of employee
 
 const index = (req, res, next) => {
-    Employee.find()
-        .then(response => {
-            res.json({
-                response
+    // Employee.find()
+    //     .then(response => {
+    //         res.json({
+    //             response
+    //         })
+    //     })
+    //     .catch(error => {
+    //         res.json({
+    //             message: "An error Occours!"
+    //         })
+    //     })
+
+    //this line is for pagination
+    if (req.query.page && req.query.limit) {
+        Employee.paginate({}, { page: req.query.page, limit: req.query.limit })
+            .then(response => {
+                res.json({
+                    response
+                })
             })
-        })
-        .catch(error => {
-            res.json({
-                message: "An error Occours!"
+            .catch(error => {
+                res.json({
+                    message: "An error Occours!"
+                })
             })
-        })
+    } else {
+        Employee.find()
+            .then(response => {
+                res.json({
+                    response
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: "An error Occours!"
+                })
+            })
+    }
+
+
 }
 
 //show single employee 
