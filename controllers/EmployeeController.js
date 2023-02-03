@@ -143,7 +143,7 @@ const destroy = (req, res, next) => {
 }
 
 const search = (req, res, next) => {
-
+console.log(req.params.key)
     Employee.find(
         {
             "$or": [
