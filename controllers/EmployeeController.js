@@ -142,6 +142,30 @@ const destroy = (req, res, next) => {
         })
 }
 
+const search = (req, res, next) => {
+console.log(req.params.key)
+    Employee.find(
+        {
+            "$or": [
+                { name: { $regex: req.params.key } },
+                { destignation: { $regex: req.params.key } },
+            ]
+        }
+    )
+        .then(response => {
+            res.json({
+                response
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            res.json({
+                message: "An error Occours!"
+            })
+        })
+
+}
+
 module.exports = {
-    index, store, update, destroy, show
+    index, store, update, destroy, show, search
 }

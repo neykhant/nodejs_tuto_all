@@ -13,5 +13,6 @@ router.post("/store", upload.array('avatar[]'), EmployeeController.store)
 
 router.post("/update", EmployeeController.update)
 router.delete("/delete", EmployeeController.destroy)
+router.get("/search/:key", EmployeeController.search)
 
 module.exports = router
